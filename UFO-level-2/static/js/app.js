@@ -1,27 +1,26 @@
 // G
-var $tbody = document.querySelector("tbody");
-var $dateInput = document.querySelector("#datetime");
-var $stateInput = document.querySelector("#state");
-var $cityInput = document.querySelector("#city");
-var $countryInput = document.querySelector("#country");
-var $shapeInput = document.querySelector("#shape");
+var tbody = d3.select("tbody");
+var dateInput = d3.select("#datetime");
+var stateInput = d3.select("#state");
+var cityInput = d3.select("#city");
+var countryInput = d3.select("#country");
+var shapeInput = d3.select("#shape");
 
+var search = d3.select("#search");
+var reset = d3.select("#reset");
 
-var $search = document.querySelector("#search");
-var $reset = document.querySelector("#reset");
-
-$search.addEventListener("click", SearchButtonClick);
-$reset.addEventListener("click", ResetButtonClick);
+search.on("click", SearchButtonClick);
+reset.on("click", ResetButtonClick);
 
 var filteredData = data;
 
 function SearchButtonClick() {
   
-  var filterDate = $dateInput.value.trim();
-  var filterCity = $cityInput.value.trim().toLowerCase();
-  var filterState = $stateInput.value.trim().toLowerCase();
-  var filterCountry = $countryInput.value.trim().toLowerCase();
-  var filterShape = $shapeInput.value.trim().toLowerCase();
+  var filterDate = dateInput.property("value").trim();
+  var filterCity = cityInput.property("value").trim().toLowerCase();
+  var filterState = stateInput.property("value").trim().toLowerCase();
+  var filterCountry = countryInput.property("value").trim().toLowerCase();
+  var filterShape = shapeInput.property("value").trim().toLowerCase();
 
 
   if (filterDate != "") {
@@ -67,20 +66,15 @@ if (filterShape != "") {
 
 
 function renderTable() {
-  $tbody.innerHTML = "";
+  tbody.html("");
   
-  for (var i = 0; i < filteredData.length; i++) {
-    
-    var address = filteredData[i];
-    var tlists = Object.keys(address);
-    
-    var $row = $tbody.insertRow(i);
-    for (var j = 0; j < tlists.length; j++) {
-      var tuple = tlists[j];
-      var $cell = $row.insertCell(j);
-      $cell.innerText = address[tuple];
-    }
-  }
+  filteredData.forEach((Report) => {
+    var row = tbody.append("tr");
+    Object.entries(Report).forEach(([key, value]) => {
+        var cell = row.append("td");
+        cell.text(value);
+    });
+  });
 }
 
 
